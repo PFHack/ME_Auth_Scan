@@ -1,0 +1,2 @@
+zoomeye~=2.1.1
+memcache~=0.11.0
