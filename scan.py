@@ -9,7 +9,6 @@ import sys
 import threading
 from queue import Queue
 
-import memcache
 from zoomeye.sdk import ZoomEye
 
 yellow = '\033[01;33m'
@@ -93,6 +92,7 @@ class Parser_thread(threading.Thread):
         try:
             ip = item.split(':')[0]
             port = int(item.split(':')[1])
+            # self.file.write(ip + ':' + str(port) + "\n")
             socket.setdefaulttimeout(10)
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.connect((ip, port))
@@ -100,7 +100,7 @@ class Parser_thread(threading.Thread):
             result = s.recv(1024)
             if "STAT version" in str(result, encoding='utf-8'):
                 print('[+] Memcache Unauthorized: ' + ip + ':' + str(port))
-                self.file.write(ip + ':' + str(port) + "\n")
+                # self.file.write(ip + ':' + str(port) + "\n")
         except Exception as err:
             print(err)
 
@@ -134,8 +134,7 @@ def scan():
     # 等待所有线程结束
     for t in crawl_threads:
         t.join()
-
-        # 初始化解析线程
+    # 初始化解析线程
     parse_thread = []
     parser_name_list = ['parse_1', 'parse_2', 'parse_3']
     for thread_id in parser_name_list:  #
